@@ -7,3 +7,4 @@
 # Needed
 * Video recording
 * Contact to sound to behavior of animation
+![Alt text](img/grid.png?raw=true "Grid")
