@@ -9,7 +9,8 @@ window.onload = () => {
     let buttonLuku = document.querySelectorAll('nav ul li button.luku')[0];
     let buttonMuoto = document.querySelectorAll('nav ul li button.muoto')[0];
     window.intervals = [];
-    window.atoms = 255;
+    window.atoms = 0;
+    window.atimateSpeed = 256;
     window.fib = (val) => {
         return (val === 0 || val === 1) ? val : fib(val-1) + fib(val-2);
     };
@@ -57,14 +58,37 @@ window.onload = () => {
         buttonLuku.innerHTML = "Nosta lukua " + window.atoms;
         //muutaMuotoaFn();
     });
+    (function luku() {
+        setTimeout(() => {
+            buttonLuku.click();
+            luku();
+        }, 1000);
+    })();
     let create = (atomCount) => {
 
-        let molecules = [{
-            name: "Water",
-            atoms: [],
-            left: "0%",
-            top: "0%"
-        }];
+        let molecules = [];
+        let rows = 0;
+        let leftPos = 0;
+        for(let i = 0; i<2142; i++) {
+            let top = '0%';
+            let left = leftPos * 2 + '%';
+            if((i/10) % 1 === 0) {
+                top = '0%';
+            }
+            if(i != 0 && i % 46 === 0) {
+                leftPos = 0;
+                left = leftPos * 2 + "";
+                rows++;
+            }
+            top = rows * 2 + "%";
+            leftPos++;
+            molecules.push({
+                name: "Water",
+                atoms: [],
+                left:   left,
+                top: top
+            });
+        }
         let fib = (val) => {
             return (val === 0 || val === 1) ? val : fib(val-1) + fib(val-2);
         }
@@ -91,10 +115,12 @@ window.onload = () => {
         let x = 3;
         let y = 15;
         for(let i=0; i<=atoms;i++) {
+            /*
             let kanta = (window.innerWidth-(window.innerWidth*0.15))/atoms;
             let korkeus = (window.innerHeight-(window.innerHeight*0.15))/atoms;
             let A = (kanta*korkeus)/2;
-            let pos = (((A/90)/window.innerWidth)*100)+(pi*2);
+            //let pos = (((A/90)/window.innerWidth)*100)+(pi*2);
+            */
             let positions = {
                 left: '45%',
                 right: '45%',
@@ -591,7 +617,7 @@ window.onload = () => {
         vety.forEach((elem, ind) => {
             let angle = 0;
             (function move(elem, pi, angle) {
-                setInterval(() => {
+                setTimeout(() => {
 
                     // rotate("+angle + (random() * (pi*20)) +"deg) scale("+random() * (pi)+", "+random() * (pi)+")"
                     var animateString = "rotateX("+angle + (random() * (pi*40)) +"deg) rotateY("+angle + (random() * (pi*50)) +"deg) scale("+random() * (pi*3)+", "+random() * (pi*2)+")";
@@ -608,8 +634,7 @@ window.onload = () => {
                         angle = 0;
                     }
                     angle++;
-                    int++;
-                }, 256);
+                }, window.atimateSpeed);
             })(elem, pi, angle);
         });
     };
